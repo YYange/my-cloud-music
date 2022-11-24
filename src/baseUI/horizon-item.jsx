@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import Scroll from "../baseUI/scroll";
 import styled from "styled-components";
@@ -9,7 +9,7 @@ const List = styled.div`
   align-items: center;
   height: 30px;
   overflow: hidden;
-  > span:first-of-type {
+  >span:first-of-type{
     display: block;
     flex: 0 0 auto;
     padding: 5px 0;
@@ -18,25 +18,37 @@ const List = styled.div`
     font-size: ${style["font-size-m"]};
     vertical-align: middle;
   }
-`;
+`
 const ListItem = styled.span`
   flex: 0 0 auto;
   font-size: ${style["font-size-m"]};
   padding: 5px 8px;
   border-radius: 10px;
-  &.selected {
+  &.selected{
     color: ${style["theme-color"]};
     border: 1px solid ${style["theme-color"]};
     opacity: 0.8;
   }
-`;
+`
 
 const Horizon = (props) => {
   const { list, oldVal, title } = props;
   const { handleClick } = props;
+  const Category = useRef(null);
+  
+
+  useEffect(() => {
+    const dom = Category.current;
+    const spans = dom.querySelectorAll("span");
+    let width = Array.from(spans).reduce((pre, cur) => {
+      return pre + cur.offsetWidth;
+    }, 0);
+    dom.style.width = `${width}px`;
+  }, []);
+  
   return (
     <Scroll direction="horizental">
-      <div>
+      <div ref={Category} className="wrapper">
         <List>
           <span>{title}</span>
           {list.map((item) => {
@@ -44,7 +56,7 @@ const Horizon = (props) => {
               <ListItem
                 key={item.key}
                 className={item.key === oldVal ? "selected" : ""}
-                onClick={() => handleClick(item.key)}
+                onClick={()=>handleClick(item.key)}
               >
                 {item.name}
               </ListItem>

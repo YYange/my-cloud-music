@@ -16,7 +16,7 @@ const Scroll = forwardRef((props, ref) => {
 
   useEffect(() => {
     const scroll = new BScroll(scrollContainerRef.current, {
-      scrollX: direction === "horizontal",
+      scrollX: direction === "horizental",
       scrollY: direction === "vertical",
       probeType: 3,
       click: click,
@@ -72,7 +72,7 @@ const Scroll = forwardRef((props, ref) => {
   useEffect(() => {
     if (refresh && bScroll) {
       bScroll.refresh();
-      bScroll.scrollTo(0, 0);
+      // bScroll.scrollTo(0, 0);
     }
   });
 
