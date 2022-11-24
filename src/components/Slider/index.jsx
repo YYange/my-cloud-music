@@ -12,7 +12,7 @@ const Slider = (props) => {
     <SwiperContainer>
       <div className="before"></div>
       <Swiper
-        className="swiper-container"
+        className="slider-container"
         loop={true}
         modules={[Autoplay, Pagination]}
         autoplay={{ delay: 5000, disableOnInteraction: false }}
