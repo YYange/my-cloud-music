@@ -72,7 +72,6 @@ const Scroll = forwardRef((props, ref) => {
   useEffect(() => {
     if (refresh && bScroll) {
       bScroll.refresh();
-      // bScroll.scrollTo(0, 0);
     }
   });
 
