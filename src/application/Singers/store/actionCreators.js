@@ -4,8 +4,6 @@ import {
 } from "../../../api/request";
 import {
   CHANGE_SINGER_LIST,
-  CHANGE_CATOGORY,
-  CHANGE_ALPHA,
   CHANGE_PAGE_COUNT,
   CHANGE_PULLUP_LOADING,
   CHANGE_PULLDOWN_LOADING,
@@ -60,11 +58,16 @@ export const refreshMoreHotSingerList = () => {
   return (dispatch, getState) => {
     const pageCount = getState().getIn(["singers", "pageCount"]);
     const singerList = getState().getIn(["singers", "singerList"]);
-    getHotSingerList(pageCount).then((res) => {
-      const data = [...singerList, ...res.artists];
-      dispatch(changeSingerList(data));
-      dispatch(changePullUpLoading(false));
-    });
+    console.log(pageCount);
+    getHotSingerListRequest(pageCount)
+      .then((res) => {
+        const data = [...singerList, ...res.artists];
+        dispatch(changeSingerList(data));
+        dispatch(changePullUpLoading(false));
+      })
+      .catch(() => {
+        console.log("热门歌手加载失败");
+      });
   };
 };
 

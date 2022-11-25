@@ -1,18 +1,57 @@
-import { forwardRef, useRef, useState, useEffect ,useImperativeHandle} from "react";
+import {
+  forwardRef,
+  useRef,
+  useState,
+  useEffect,
+  useImperativeHandle,
+} from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import BScroll from "better-scroll";
+import Loading from "../baseUI/loading";
+import LoadingV2 from "../baseUI/LoadingV2";
 
 const ScrollContainer = styled.div`
   width: 100%;
   height: 100%;
   overflow: hidden;
 `;
+
+const PullUpLoading = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 5px;
+  width: 60px;
+  height: 60px;
+  margin: auto;
+  z-index: 100;
+`;
+
+export const PullDownLoading = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0px;
+  height: 30px;
+  margin: auto;
+  z-index: 100;
+`;
 const Scroll = forwardRef((props, ref) => {
   const [bScroll, setBScroll] = useState();
   const scrollContainerRef = useRef();
-  const { direction, click, refresh, bounceTop, bounceBottom } = props;
+  const {
+    direction,
+    click,
+    refresh,
+    bounceTop,
+    bounceBottom,
+    pullUpLoading,
+    pullDownLoading,
+  } = props;
   const { pullUp, pullDown, onScroll } = props;
+  const pullUpStyle = pullUpLoading ? { display: "" } : { display: "none" };
+  const pullDownStyle = pullDownLoading ? { display: "" } : { display: "none" };
 
   useEffect(() => {
     const scroll = new BScroll(scrollContainerRef.current, {
@@ -24,7 +63,7 @@ const Scroll = forwardRef((props, ref) => {
         top: bounceTop,
         bottom: bounceBottom,
       },
-      mouseWheel:true
+      mouseWheel: true,
     });
     setBScroll(scroll);
     return () => {
@@ -90,13 +129,19 @@ const Scroll = forwardRef((props, ref) => {
   // }));
 
   return (
-    <ScrollContainer ref={scrollContainerRef}>
-      {props.children}
-    </ScrollContainer>
+    <>
+      <PullUpLoading style={pullUpStyle}>
+        <Loading></Loading>
+      </PullUpLoading>
+      <ScrollContainer ref={scrollContainerRef}>
+        {props.children}
+      </ScrollContainer>
+      <PullDownLoading style={pullDownStyle}>
+        <LoadingV2></LoadingV2>
+      </PullDownLoading>
+    </>
   );
 });
-
-
 
 Scroll.defaultProps = {
   direction: "vertical",

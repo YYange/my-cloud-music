@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Horizon from "../../baseUI/horizon-item";
 import { categoryTypes, alphaTypes } from "../../api/config";
 import styled from "styled-components";
@@ -25,18 +25,11 @@ export const NavContainer = styled.div`
   overflow: hidden;
 `;
 
-const singerList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((item) => {
-  return {
-    picUrl:
-      "https://p2.music.126.net/uTwOm8AEFFX_BYHvfvFcmQ==/109951164232057952.jpg",
-    name: "隔壁老樊",
-    accountId: 277313426,
-  };
-});
-const renderSingerList = () => {
+const renderSingerList = (singerList) => {
+  const singerListJS = singerList ? singerList.toJS() : [];
   return (
     <List>
-      {singerList.map((item, index) => {
+      {singerListJS.map((item, index) => {
         return (
           <ListItem key={item.accountId + "" + index}>
             <div className="img_wrapper">
@@ -55,29 +48,64 @@ const renderSingerList = () => {
   );
 };
 
-const Singer = () => {
-  const [oldSinger, setOldSinger] = useState("");
+const Singer = (props) => {
+  const [category, setCategory] = useState("");
   const [oldAlpha, setOldAlpha] = useState("");
+  const { pullUpLoading, pullDownLoading, pageCount, singerList } = props;
+  const {
+    getHotSingerDispatch,
+    updateDispatch,
+    pullUpRefreshDispatch,
+    pullDownRefreshDispatch,
+  } = props;
+
+  const handleUpdateCategory = (val) => {
+    setCategory(val);
+    updateDispatch(val, oldAlpha);
+  };
+
+  const handleAlphaUpdate = (val) => {
+    setOldAlpha(val);
+    updateDispatch(category, val);
+  };
+
+  const handlePullUp = () => {
+    pullUpRefreshDispatch(category, oldAlpha, category === "", pageCount);
+  };
+
+  const handlePullDown = () => {
+    pullDownRefreshDispatch(category, oldAlpha);
+  };
+  useEffect(() => {
+    getHotSingerDispatch();
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <div>
-      {" "}
       <NavContainer>
         <Horizon
           list={categoryTypes}
           title="分类 (默认热门):"
-          handleClick={setOldSinger}
-          oldVal={oldSinger}
+          handleClick={handleUpdateCategory}
+          oldVal={category}
         ></Horizon>
         <Horizon
           list={alphaTypes}
           title={"首字母:"}
-          handleClick={setOldAlpha}
+          handleClick={handleAlphaUpdate}
           oldVal={oldAlpha}
         ></Horizon>
       </NavContainer>
       <ListContainer>
-        <Scroll>{renderSingerList()}</Scroll>
+        <Scroll
+          pullUp={handlePullUp}
+          pullDown={handlePullDown}
+          pullUpLoading={pullUpLoading}
+          pullDownLoading={pullDownLoading}
+        >
+          {renderSingerList(singerList)}
+        </Scroll>
       </ListContainer>
     </div>
   );
