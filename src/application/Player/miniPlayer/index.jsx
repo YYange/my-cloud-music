@@ -2,8 +2,10 @@ import { getName } from "../../../api/utlis";
 import { MiniPlayerContainer } from "./style";
 import React, { useRef } from "react";
 import { CSSTransition } from "react-transition-group";
+import ProcessCirCle from "../../../baseUI/Process-circle";
 
 const MiniPlayer = (props) => {
+  const percent = 0.2;
   const { song, fullScreen } = props;
   const { toggleFullScreen } = props;
   const miniPlayerRef = useRef();
@@ -39,7 +41,9 @@ const MiniPlayer = (props) => {
           <p className="desc">{getName(song.ar)}</p>
         </div>
         <div className="control">
-          <i className="iconfont">&#xe650;</i>
+          <ProcessCirCle radius={32} percent={percent}>
+            <i className="icon-mini iconfont icon-pause">&#xe650;</i>
+          </ProcessCirCle>
         </div>
         <div className="control">
           <i className="iconfont">&#xe640;</i>

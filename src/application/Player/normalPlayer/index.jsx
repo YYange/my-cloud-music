@@ -8,25 +8,25 @@ import {
   Bottom,
   Operators,
   CDWrapper,
+  ProgressWrapper,
 } from "./style";
-
+import ProgressBar from "../../../baseUI/ProcessBar";
 const NormalPlayer = (props) => {
   const { song, fullScreen } = props;
   const { toggleFullScreen } = props;
-  const normalRef = useRef()
+  const normalRef = useRef();
   return (
     <CSSTransition
       timeout={400}
       in={fullScreen}
       classNames="normal"
-      onEnter={()=>{
-        normalRef.current.style.display='block'
+      onEnter={() => {
+        normalRef.current.style.display = "block";
       }}
-      onExit={()=>{
-        normalRef.current.style.display='none'
+      onExit={() => {
+        normalRef.current.style.display = "none";
       }}
       mountOnEnter
-      
     >
       <NormalPlayerContainer ref={normalRef}>
         <div className="background">
@@ -47,7 +47,7 @@ const NormalPlayer = (props) => {
         </Top>
         <Middle>
           <CDWrapper>
-            <div className="cd" >
+            <div className="cd">
               <img
                 className="image play"
                 src={song.al.picUrl + "?param=400x400"}
@@ -57,6 +57,13 @@ const NormalPlayer = (props) => {
           </CDWrapper>
         </Middle>
         <Bottom className="bottom">
+          <ProgressWrapper>
+            <span className="time time-l">0:00</span>
+            <div className="progress-bar-wrapper">
+              <ProgressBar percent={0.2}></ProgressBar>
+            </div>
+            <div className="time time-r">4:17</div>
+          </ProgressWrapper>
           <Operators>
             <div className="icon i-left">
               <i className="iconfont">&#xe625;</i>
