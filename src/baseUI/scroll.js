@@ -114,19 +114,19 @@ const Scroll = forwardRef((props, ref) => {
     }
   });
 
-  // useImperativeHandle (ref, () => ({
-  //   refresh () {
-  //     if (bScroll) {
-  //       bScroll.refresh ();
-  //       bScroll.scrollTo (0, 0);
-  //     }
-  //   },
-  //   getBScroll () {
-  //     if (bScroll) {
-  //       return bScroll;
-  //     }
-  //   }
-  // }));
+  useImperativeHandle (ref, () => ({
+    refresh () {
+      if (bScroll) {
+        bScroll.refresh ();
+        bScroll.scrollTo (0, 0);
+      }
+    },
+    getBScroll () {
+      if (bScroll) {
+        return bScroll;
+      }
+    }
+  }));
 
   return (
     <>

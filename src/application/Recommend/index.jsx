@@ -7,21 +7,15 @@ import { connect } from "react-redux";
 import * as actionTypes from "./store/actionCreators";
 import { forceCheck } from "react-lazyload";
 import Loading from "../../baseUI/loading";
+import { renderRoutes } from "react-router-config";
 
 const Recommend = (props) => {
   const { bannerList, recommendList, loading } = props;
-  const {
-    getBannerListDispatch,
-    getRecommendListDispatch,
-  } = props;
+  const { getBannerListDispatch, getRecommendListDispatch } = props;
   useEffect(() => {
-    console.log(loading);
-    setTimeout(() => {
-      getBannerListDispatch();
-      getRecommendListDispatch();
-    }, 1000);
+    getBannerListDispatch();
+    getRecommendListDispatch();
   }, [getBannerListDispatch, getRecommendListDispatch, loading]);
-
 
   const bannerListJS = bannerList ? bannerList.toJS() : [];
   const recommendListJS = recommendList ? recommendList.toJS() : [];
@@ -37,6 +31,7 @@ const Recommend = (props) => {
           <RecommendList recommendList={recommendListJS}></RecommendList>
         </div>
       </Scroll>
+      {renderRoutes(props.route.routes)}
     </Content>
   );
 };

@@ -15,6 +15,7 @@ import {
   changePullDownLoading,
   refreshMoreHotSingerList,
 } from "./store/actionCreators";
+import { renderRoutes } from "react-router-config";
 
 export const NavContainer = styled.div`
   box-sizing: border-box;
@@ -24,29 +25,6 @@ export const NavContainer = styled.div`
   padding: 5px;
   overflow: hidden;
 `;
-
-const renderSingerList = (singerList) => {
-  const singerListJS = singerList ? singerList.toJS() : [];
-  return (
-    <List>
-      {singerListJS.map((item, index) => {
-        return (
-          <ListItem key={item.accountId + "" + index}>
-            <div className="img_wrapper">
-              <img
-                src={`${item.picUrl}?param=300x300`}
-                width="100%"
-                height="100%"
-                alt="music"
-              />
-            </div>
-            <span className="name">{item.name}</span>
-          </ListItem>
-        );
-      })}
-    </List>
-  );
-};
 
 const Singer = (props) => {
   const [category, setCategory] = useState("");
@@ -75,6 +53,40 @@ const Singer = (props) => {
 
   const handlePullDown = () => {
     pullDownRefreshDispatch(category, oldAlpha);
+  };
+
+  const enterDetail = (id) => {
+    props.history.push(`/singers/${id}`);
+  };
+
+  const renderSingerList = (singerList) => {
+    const singerListJS = singerList ? singerList.toJS() : [];
+    return (
+      <>
+        {" "}
+        <List>
+          {singerListJS.map((item, index) => {
+            return (
+              <ListItem
+                key={item.accountId + "" + index}
+                onClick={() => enterDetail(item.id)}
+              >
+                <div className="img_wrapper">
+                  <img
+                    src={`${item.picUrl}?param=300x300`}
+                    width="100%"
+                    height="100%"
+                    alt="music"
+                  />
+                </div>
+                <span className="name">{item.name}</span>
+              </ListItem>
+            );
+          })}
+        </List>
+        {renderRoutes(props.route.routes)}
+      </>
+    );
   };
   useEffect(() => {
     getHotSingerDispatch();
